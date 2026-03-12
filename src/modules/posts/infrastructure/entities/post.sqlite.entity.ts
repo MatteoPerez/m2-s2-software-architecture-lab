@@ -17,4 +17,7 @@ export class SQLitePostEntity {
 
   @Column()
   authorId: string;
+
+  @Column({ unique: true })
+  slug: string;
 }

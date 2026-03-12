@@ -22,6 +22,17 @@ export class SQLitePostRepository implements PostRepository {
     return post ? PostEntity.reconstitute({ ...post }) : undefined;
   }
 
+  public async findBySlug(slug: string): Promise<PostEntity | undefined> {
+    const post = await this.dataSource
+      .getRepository(SQLitePostEntity)
+      .findOne({
+        where: { slug },
+        relations: ['tags']
+      });
+
+    return post ? PostEntity.reconstitute({ ...post }) : undefined;
+  }
+
   public async createPost(input: PostEntity): Promise<void> {
     await this.dataSource.getRepository(SQLitePostEntity).save(input.toJSON());
   }

@@ -18,6 +18,8 @@ import { DeletePostUseCase } from '../../application/use-cases/delete-post.use-c
 import { GetPostByIdUseCase } from '../../application/use-cases/get-post-by-id.use-case';
 import { GetPostsUseCase } from '../../application/use-cases/get-posts.use-case';
 import { UpdatePostUseCase } from '../../application/use-cases/update-post.use-case';
+import { DeleteTagFromPostUseCase } from '../../application/use-cases/delete-tag-from-post.use-case';
+import { GetPostBySlugUseCase } from '../../application/use-cases/get-post-by-slug.use-case';
 
 @Controller('posts')
 export class PostController {
@@ -27,6 +29,8 @@ export class PostController {
     private readonly deletePostUseCase: DeletePostUseCase,
     private readonly getPostsUseCase: GetPostsUseCase,
     private readonly getPostByIdUseCase: GetPostByIdUseCase,
+    private readonly getPostBySlugUseCase: GetPostBySlugUseCase,
+    private readonly deleteTagFromPostUseCase: DeleteTagFromPostUseCase,
   ) {}
 
   @Get()
@@ -54,7 +58,7 @@ export class PostController {
     @Body() input: Omit<CreatePostDto, 'authorId'>,
   ) {
     return this.createPostUseCase.execute(
-      { ...input, authorId: user.id },
+      { ...input },
       user,
     );
   }
@@ -70,5 +74,11 @@ export class PostController {
   @Delete(':id')
   public async deletePost(@Param('id') id: string) {
     return this.deletePostUseCase.execute(id);
+  }
+
+  @Get('slug/:slug')
+  public async getPostBySlug(@Param('slug') slug: string) {
+    const post = await this.getPostBySlugUseCase.execute(slug);
+    return post?.toJSON();
   }
 }
