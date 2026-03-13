@@ -44,7 +44,7 @@ export class PostEntity {
   }
 
   public updateSlug(newSlug: string): void {
-    this._slug = PostSlug.fromTitle(newSlug);
+    this._slug = PostSlug.create(newSlug);
   }
 
   public get tags() {
