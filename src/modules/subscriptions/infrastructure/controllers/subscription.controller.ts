@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Param, Get, UseGuards, HttpCode } from '@nestjs/common';
+import { Controller, Post, Delete, Param, Get, UseGuards, HttpCode, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { FollowUserUseCase } from '../../application/use-cases/follow-user.use-case';
 import { Requester } from 'src/modules/shared/auth/infrastructure/decorators/requester.decorator';
@@ -51,17 +51,26 @@ export class SubscriptionController {
     @ApiOperation({ summary: 'Obtenir les abonnés d\'un utilisateur' })
     @ApiResponse({ status: 200, description: 'Liste des abonnés récupérée avec succès.' })
     @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
-    public async getFollowers(@Param('id') userId: string) {
-        const followers = await this.getFollowersUseCase.execute(userId);
-        return followers.map(f => f.toJSON());
+    public async getFollowers(
+        @Param('id') userId: string,
+        @Query('page') page: number = 1,
+        @Query('pageSize') pageSize: number = 20,
+    ) {
+        const limit = Math.min(pageSize, 100);
+        
+        return await this.getFollowersUseCase.execute(userId, Number(page), Number(limit));
     }
 
     @Get(':id/following')
     @ApiOperation({ summary: 'Obtenir les abonnements d\'un utilisateur' })
     @ApiResponse({ status: 200, description: 'Liste des abonnements récupérée avec succès.' })
     @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
-    public async getFollowing(@Param('id') userId: string) {
-        const following = await this.getFollowingUseCase.execute(userId);
-        return following.map(f => f.toJSON());
+    public async getFollowing(
+        @Param('id') userId: string,
+        @Query('page') page: number = 1,
+        @Query('pageSize') pageSize: number = 20,
+    ) {
+        const limit = Math.min(pageSize, 100);
+        return await this.getFollowingUseCase.execute(userId, Number(page), Number(limit));
     }
 }
