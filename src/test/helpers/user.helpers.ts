@@ -5,7 +5,7 @@ export function makeUserWithPermission(): UserEntity {
     id: 'user-1',
     permissions: {
       posts: {
-        canCreate: () => true,
+        isAdmin: () => true,
       },
     },
   } as unknown as UserEntity;
@@ -16,7 +16,7 @@ export function makeUserWithoutPermission(): UserEntity {
     id: 'user-2',
     permissions: {
       posts: {
-        canCreate: () => false,
+        isAdmin: () => false,
       },
     },
   } as unknown as UserEntity;

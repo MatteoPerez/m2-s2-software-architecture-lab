@@ -14,11 +14,11 @@ export class TagEntity {
         return this._name;
     }
 
-    public static reconstitute(input: Record<string, unknown>) {
+    public static reconstitute(input: Record<string, unknown>): TagEntity {
         return new TagEntity(
             input.id as string,
             new TagName(input.name as string),
-            new Date(input.createdAt as string)
+            new Date(input.createdAt as string),
         );
     }
 
@@ -26,11 +26,11 @@ export class TagEntity {
         return {
             id: this.id,
             name: this._name.toString(),
-            createdAt: this._createdAt.toString(),
+            createdAt: this._createdAt.toISOString(),
         };
     }
 
-    public static create(name: string): TagEntity {
+    public static create(name : string): TagEntity {
         return new TagEntity(
             v4(),
             new TagName(name),

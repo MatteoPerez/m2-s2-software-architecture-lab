@@ -20,7 +20,7 @@ export class CreateTagUseCase {
     public async execute(input: CreateTagDto, user: UserEntity): Promise<void> {
         this.loggingService.log('CreateTagUseCase.execute');
         
-        if (!user.permissions.tags.canCreate()) {
+        if (!user.permissions.tags.isAdmin()) {
             throw new UserCannotCreateTagException();
         }
 
