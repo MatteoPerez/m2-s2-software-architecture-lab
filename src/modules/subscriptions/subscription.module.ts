@@ -8,6 +8,9 @@ import { SubscriptionController } from './infrastructure/controllers/subscriptio
 
 // Use Cases
 import { FollowUserUseCase } from './application/use-cases/follow-user.use-case';
+import { UnfollowUserUseCase } from './application/use-cases/unfollow-user.use-case';
+import { GetFollowersUseCase } from './application/use-cases/get-followers.use-case';
+import { GetFollowingUseCase } from './application/use-cases/get-following.use-case';
 
 @Module({
     imports: [
@@ -22,6 +25,9 @@ import { FollowUserUseCase } from './application/use-cases/follow-user.use-case'
         useClass: SQLiteSubscriptionRepository,
         },
         FollowUserUseCase,
+        UnfollowUserUseCase,
+        GetFollowersUseCase,
+        GetFollowingUseCase,
     ],
     exports: [SubscriptionRepository],
 })

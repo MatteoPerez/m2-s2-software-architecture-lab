@@ -3,6 +3,9 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { FollowUserUseCase } from '../../application/use-cases/follow-user.use-case';
 import { Requester } from 'src/modules/shared/auth/infrastructure/decorators/requester.decorator';
 import { UserEntity } from 'src/modules/users/domain/entities/user.entity';
+import { UnfollowUserUseCase } from '../../application/use-cases/unfollow-user.use-case';
+import { GetFollowersUseCase } from '../../application/use-cases/get-followers.use-case';
+import { GetFollowingUseCase } from '../../application/use-cases/get-following.use-case';
 import { JwtAuthGuard } from 'src/modules/shared/auth/infrastructure/guards/jwt-auth.guard';
 
 @ApiTags('Subscriptions')
@@ -10,6 +13,9 @@ import { JwtAuthGuard } from 'src/modules/shared/auth/infrastructure/guards/jwt-
 export class SubscriptionController {
     constructor(
         private readonly followUserUseCase: FollowUserUseCase,
+        private readonly unfollowUserUseCase: UnfollowUserUseCase,
+        private readonly getFollowersUseCase: GetFollowersUseCase,
+        private readonly getFollowingUseCase: GetFollowingUseCase,
     ) { }
 
     @Post(':id/follow')
@@ -25,5 +31,37 @@ export class SubscriptionController {
     ) {
         await this.followUserUseCase.execute(user.id, targetUserId);
         return { message: 'Successfully followed' };
+    }
+
+    @Delete(':id/unfollow')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('access-token')
+    @ApiOperation({ summary: 'Ne plus suivre un utilisateur' })
+    @ApiResponse({ status: 200, description: 'Utilisateur non suivi avec succès.' })
+    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    public async unfollow(
+        @Param('id') targetUserId: string,
+        @Requester() user: UserEntity,
+    ) {
+        await this.unfollowUserUseCase.execute(user.id, targetUserId);
+        return { message: 'Successfully unfollowed' };
+    }
+
+    @Get(':id/followers')
+    @ApiOperation({ summary: 'Obtenir les abonnés d\'un utilisateur' })
+    @ApiResponse({ status: 200, description: 'Liste des abonnés récupérée avec succès.' })
+    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    public async getFollowers(@Param('id') userId: string) {
+        const followers = await this.getFollowersUseCase.execute(userId);
+        return followers.map(f => f.toJSON());
+    }
+
+    @Get(':id/following')
+    @ApiOperation({ summary: 'Obtenir les abonnements d\'un utilisateur' })
+    @ApiResponse({ status: 200, description: 'Liste des abonnements récupérée avec succès.' })
+    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    public async getFollowing(@Param('id') userId: string) {
+        const following = await this.getFollowingUseCase.execute(userId);
+        return following.map(f => f.toJSON());
     }
 }
