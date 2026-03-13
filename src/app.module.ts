@@ -10,6 +10,7 @@ import { DatabaseModule } from './modules/shared/database/database.module';
 import { UserModule } from './modules/users/user.module';
 import { CommentModule } from './modules/comments/comment.module';
 import { TagModule } from './modules/tags/tag.module';
+import { SubscriptionModule } from './modules/subscriptions/subscription.module';
 
 @Module({
   imports: [
