@@ -6,6 +6,7 @@ import { CommentRepository } from './domain/repositories/comment.repository';
 import { CommentController } from './infrastructure/controllers/comment.controller';
 import { SQLiteCommentRepository } from './infrastructure/repositories/comment.sqlite.repository';
 import { CreateCommentUseCase } from './application/use-cases/create-comment.use-case';
+import { UpdateCommentUseCase } from './application/use-cases/update-comment.use-case';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { CreateCommentUseCase } from './application/use-cases/create-comment.use
       useClass: SQLiteCommentRepository,
     },
     
-    CreateCommentUseCase
+    CreateCommentUseCase,
+    UpdateCommentUseCase
   ],
   exports: [CommentRepository],
 })
