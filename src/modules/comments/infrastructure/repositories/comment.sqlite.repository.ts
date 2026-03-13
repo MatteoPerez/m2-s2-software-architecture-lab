@@ -21,10 +21,17 @@ export class SQLiteCommentRepository implements CommentRepository {
         return comment ? CommentEntity.reconstitute({ ...comment }) : undefined;
     }
 
-    public async findByPostId(postId: string): Promise<CommentEntity[]> {
+    public async findByPostId(
+        postId: string, 
+        options: { page: number; pageSize: number; sortBy: string; order: 'ASC' | 'DESC' }
+        ): Promise<CommentEntity[]> {
+        const { page, pageSize, sortBy, order } = options;
+
         const comments = await this.repository.find({
             where: { postId },
-            order: { createdAt: 'DESC' }
+            order: { [sortBy]: order },
+            take: pageSize,
+            skip: (page - 1) * pageSize,
         });
 
         return comments.map((c) => CommentEntity.reconstitute({ ...c }));
