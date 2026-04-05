@@ -11,6 +11,7 @@ import { UserModule } from './modules/users/user.module';
 import { CommentModule } from './modules/comments/comment.module';
 import { TagModule } from './modules/tags/tag.module';
 import { SubscriptionModule } from './modules/subscriptions/subscription.module';
+import { NotificationModule } from './modules/notifications/notification.module';
 
 @Module({
   imports: [
@@ -31,6 +32,8 @@ import { SubscriptionModule } from './modules/subscriptions/subscription.module'
     UserModule,
     TagModule,
     CommentModule,
+    SubscriptionModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],
