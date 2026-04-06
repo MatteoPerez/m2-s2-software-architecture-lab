@@ -18,15 +18,14 @@ export class DeletePostUseCase {
     const post = await this.postRepository.getPostById(id);
 
     if (!post) throw new NotFoundException('Post not found');
-
-    // if (!user.permissions.posts.canDeletePost(post)) {
-    //     throw new ForbiddenException("You cannot delete this post");
-    // }
+    if (!user.permissions.posts.canDeletePost(post)) {
+        throw new ForbiddenException("You cannot delete this post");
+    }
 
     this.eventEmitter.emit('post.deleted', {
         postId: post.id,
         authorId: post.authorId,
-        // title: post.title.toString(),
+        title: post.title.toString()
     });
 
     await this.postRepository.deletePost(id);

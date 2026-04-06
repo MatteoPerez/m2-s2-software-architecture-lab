@@ -41,9 +41,11 @@ export class CreatePostUseCase {
 
     await this.postRepository.createPost(post);
 
-    this.eventEmitter.emit(PostCreatedEvent, {
+    this.eventEmitter.emit('post.pending_review', {
       postId: post.id,
       authorId: user.id,
+      title: post.title.toString(),
+      link: post.slug
     });
   }
 }

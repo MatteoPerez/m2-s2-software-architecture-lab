@@ -11,11 +11,11 @@ export class MarkNotificationAsReadUseCase {
         const notification = await this.notificationRepository.findById(notificationId);
 
         if (!notification) {
-            throw new NotFoundException(`Notification avec l'ID ${notificationId} introuvable`);
+            throw new NotFoundException(`Notification with ID ${notificationId} not found`);
         }
 
         if (notification.recipientId !== userId) {
-            throw new ForbiddenException("Vous n'êtes pas autorisé à marquer cette notification comme lue");
+            throw new ForbiddenException("You are not allowed to mark this notification as read");
         }
 
         notification.markAsRead();
