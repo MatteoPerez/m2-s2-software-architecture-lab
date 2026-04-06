@@ -21,4 +21,13 @@ export class PostPermissions {
 
     return post.status === 'accepted';
   }
+
+  public canDeletePost(post: PostEntity): boolean {
+    return post.authorId === this.userId || this.canModerate();
+  }
+
+  public canModerate(): boolean {
+    if (this.role === 'admin' || this.role === 'moderator') return true;
+    return false;
+  }
 }

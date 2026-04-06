@@ -23,8 +23,8 @@ import { AddTagToPostUseCase } from '../../application/use-cases/add-tag-to-post
 import { DeleteTagFromPostUseCase } from '../../application/use-cases/delete-tag-from-post.use-case';
 import { OptionalJwtAuthGuard } from 'src/modules/shared/auth/infrastructure/guards/optional-jwt-auth.guard';
 import { GetPostBySlugUseCase } from '../../application/use-cases/get-post-by-slug.use-case';
+import { UpdatePostStatusUseCase } from '../../application/use-cases/update-post-status.use-case';
 import type { PostStatus } from '../../domain/entities/post.entity';
-
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -37,7 +37,8 @@ export class PostController {
     private readonly getPostByIdUseCase: GetPostByIdUseCase,
     private readonly addTagToPostUseCase: AddTagToPostUseCase,
     private readonly deleteTagFromPostUseCase: DeleteTagFromPostUseCase,
-    private readonly getPostBySlugUseCase: GetPostBySlugUseCase
+    private readonly getPostBySlugUseCase: GetPostBySlugUseCase,
+    private readonly updatePostStatusUseCase: UpdatePostStatusUseCase
   ) { }
 
   @ApiOperation({ summary: 'Get all posts' })
@@ -143,5 +144,34 @@ export class PostController {
   ) {
     const post = await this.getPostBySlugUseCase.execute(slug, user);
     return post.toJSON();
+  }
+
+  @Patch(':id/status')
+  @ApiBearerAuth('access-token')
+  @UseGuards(OptionalJwtAuthGuard)
+  @ApiOperation({ summary: 'Update post status' })
+  @ApiParam({ name: 'id', description: 'ID du post à modérer' })
+  @ApiBody({ 
+    schema: {
+      type: 'object',
+      properties: {
+        status: { 
+          type: 'string', 
+          enum: ['ACCEPTED', 'REJECTED'],
+          example: 'ACCEPTED' 
+        }
+      }
+    }
+  })
+
+  @ApiResponse({ status: 200, description: 'The status has been updated and notifications sent.' })
+  @ApiResponse({ status: 403, description: 'Permission denied (not a moderator).' })
+  @ApiResponse({ status: 404, description: 'Post not found.' })
+  public async updateStatus(
+    @Param('id') id: string,
+    @Body('status') status: PostStatus,
+    @Requester() user: UserEntity,
+  ) {
+    return await this.updatePostStatusUseCase.execute(id, status, user);
   }
 }
