@@ -8,22 +8,26 @@ import { SQLiteNotificationRepository } from './infrastructure/repositories/noti
 import { GetNotificationsUseCase } from './application/use-cases/get-notifications.use-case';
 import { MarkAllNotificationsAsReadUseCase } from './application/use-cases/mark-all-read.use-case';
 import { MarkNotificationAsReadUseCase } from './application/use-cases/mark-notification-as-read.use-case';
+import { SubscriptionModule } from '../subscriptions/subscription.module';
+import { PostStatusChangedHandler } from './application/handlers/post-status-changed.handler';
 
 @Module({
     imports: [
         LoggingModule,
         AuthModule,
-        UserModule
+        UserModule,
+        SubscriptionModule
     ],
     controllers: [NotificationController],
     providers: [
         {
-        provide: NotificationRepository,
-        useClass: SQLiteNotificationRepository,
+            provide: NotificationRepository,
+            useClass: SQLiteNotificationRepository,
         },
         GetNotificationsUseCase,
         MarkAllNotificationsAsReadUseCase,
-        MarkNotificationAsReadUseCase
+        MarkNotificationAsReadUseCase,
+        PostStatusChangedHandler
     ],
     exports: [NotificationRepository],
 })
