@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, ManyToMany } from 'typeorm';
 import type { PostStatus } from '../../domain/entities/post.entity';
+import { SQLiteTagEntity } from 'src/modules/tags/infrastructure/entities/tag.sqlite.entity';
 
 @Entity('posts')
 export class SQLitePostEntity {
@@ -12,7 +13,7 @@ export class SQLitePostEntity {
   @Column()
   content: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20 })
   status: PostStatus;
 
   @Column()
@@ -20,4 +21,12 @@ export class SQLitePostEntity {
 
   @Column({ unique: true })
   slug: string;
+
+  @ManyToMany(() => SQLiteTagEntity, (tag) => tag.posts)
+  @JoinTable({
+    name: 'posts_tags',
+    joinColumn: { name: 'post_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'tag_id', referencedColumnName: 'id' },
+  })
+  tags: SQLiteTagEntity[];
 }

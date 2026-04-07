@@ -20,8 +20,8 @@ export class PostEntity {
     content: PostContent,
     authorId: string,
     status: PostStatus,
-    tags: TagEntity[] = [],
     slug: PostSlug,
+    tags: TagEntity[] = []
   ) {
     this._title = title;
     this._content = content;
@@ -43,7 +43,7 @@ export class PostEntity {
     return this._authorId;
   }
 
-  public get slug() {
+  public get slug(): string {
     return this._slug.toString();
   }
 
@@ -51,17 +51,18 @@ export class PostEntity {
     this._slug = PostSlug.create(newSlug);
   }
 
-  public get tags() {
+  public get tags(): TagEntity[] {
     return this._tags;
   }
 
-  public addTag(tag: TagEntity) {
-    if (!this._tags.find(t => t.id === tag.id)) {
+  public addTag(tag: TagEntity): void {
+    const isAlreadyPresent = this._tags.some(t => t.id === tag.id);
+    if (!isAlreadyPresent) {
       this._tags.push(tag);
     }
   }
 
-  public removeTag(tagId: string) {
+  public removeTag(tagId: string): void {
     this._tags = this._tags.filter(t => t.id !== tagId);
   }
 
@@ -76,8 +77,10 @@ export class PostEntity {
       new PostContent(input.content as string),
       input.authorId as string,
       input.status as PostStatus,
-      input.tags ? (input.tags as Record<string, unknown>[]).map(tag => TagEntity.reconstitute(tag)) : [],
-      PostSlug.create(input.slug as string)
+      PostSlug.create(input.slug as string),
+      input.tags 
+        ? (input.tags as any[]).map((t: any) => TagEntity.reconstitute(t)) 
+        : []
     );
   }
 
@@ -85,10 +88,10 @@ export class PostEntity {
     return {
       id: this.id,
       title: this._title.toString(),
+      slug: this._slug.toString(),
       content: this._content.toString(),
       status: this._status,
       authorId: this._authorId,
-      slug: this._slug.toString(),
       tags: this._tags.map(tag => tag.toJSON()),
     };
   }
@@ -97,17 +100,18 @@ export class PostEntity {
     title: string,
     content: string,
     authorId: string,
-    manuallySetSlug?: string
+    manualSlug?: string,
   ): PostEntity {
-    const slugValue = manuallySetSlug || PostSlug.fromTitle(title);
+    const slugValue = manualSlug || PostSlug.fromTitle(title);
+
     return new PostEntity(
       v4(),
       new PostTitle(title),
       new PostContent(content),
       authorId,
       'draft',
-      [],
       PostSlug.create(slugValue),
+      []
     );
   }
 

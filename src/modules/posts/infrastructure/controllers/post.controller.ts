@@ -123,9 +123,7 @@ export class PostController {
   ) {
     return this.updatePostUseCase.execute(id, input, user);
   }
-
-
-
+  
   @ApiOperation({ summary: 'Delete a post' })
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
