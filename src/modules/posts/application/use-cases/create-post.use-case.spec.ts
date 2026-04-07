@@ -16,6 +16,7 @@ describe('CreatePostUseCase', () => {
   beforeEach(() => {
     postRepository = {
       createPost: jest.fn().mockResolvedValue(undefined),
+      findBySlug: jest.fn().mockResolvedValue(null),
     } as unknown as jest.Mocked<PostRepository>;
     eventEmitter = {
       emit: jest.fn(),
@@ -38,7 +39,7 @@ describe('CreatePostUseCase', () => {
     // Assert
     expect(postRepository.createPost).toHaveBeenCalledTimes(1);
     expect(eventEmitter.emit).toHaveBeenCalledWith(
-      PostCreatedEvent,
+      'post.pending_review',
       expect.objectContaining({ authorId: createPostDto.authorId }),
     );
   });

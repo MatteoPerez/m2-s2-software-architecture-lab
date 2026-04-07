@@ -41,7 +41,7 @@ describe('CreateTagUseCase', () => {
         expect(tagRepository.createTag).toHaveBeenCalledTimes(1);
         expect(eventEmitter.emit).toHaveBeenCalledWith(
             TagCreatedEvent,
-            expect.objectContaining({ name: createTagDto.name }),
+            expect.objectContaining({ tagName: createTagDto.name }),
         );
     });
 
