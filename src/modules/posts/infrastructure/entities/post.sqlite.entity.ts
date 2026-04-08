@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, ManyToMany } from 'typeorm';
+import { Column, Entity, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
 import type { PostStatus } from '../../domain/entities/post.entity';
 import { SQLiteTagEntity } from 'src/modules/tags/infrastructure/entities/tag.sqlite.entity';
 
