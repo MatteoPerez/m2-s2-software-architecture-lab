@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SQLitePostEntity } from '../../posts/infrastructure/entities/post.sqlite.entity';
 import { SQLiteUserEntity } from '../../users/infrastructure/entities/user.sqlite.entity';
+import { SQLiteTagEntity } from '../../tags/infrastructure/entities/tag.sqlite.entity';
 import { SQLiteCommentEntity } from 'src/modules/comments/infrastructure/entities/comment.sqlite.entity';
 import { SQLiteSubscriptionEntity } from 'src/modules/subscriptions/infrastructure/entities/subscription.sqlite.entity';
 import { SQLiteNotificationEntity } from 'src/modules/notifications/infrastructure/entities/notification.sqlite.entity';
@@ -15,7 +16,7 @@ import { SQLiteNotificationEntity } from 'src/modules/notifications/infrastructu
       useFactory: (configService: ConfigService) => ({
         type: 'sqlite',
         database: configService.get<string>('DATABASE_URL'),
-        entities: [SQLitePostEntity, SQLiteUserEntity, SQLiteCommentEntity, SQLiteSubscriptionEntity, SQLiteNotificationEntity],
+        entities: [SQLitePostEntity, SQLiteUserEntity, SQLiteTagEntity, SQLiteCommentEntity, SQLiteSubscriptionEntity, SQLiteNotificationEntity],
         synchronize: true,
       }),
     }),
