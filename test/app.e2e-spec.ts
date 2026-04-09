@@ -19,13 +19,13 @@ describe('Post Flow E2E (Full Circuit)', () => {
         await app.init();
 
         adminToken = (await request(app.getHttpServer())
-            .post('/auth/login').send({ username: 'gerald', password: 'gerald' }).expect(201)).body.access_token;
+            .post('/auth/login').send({ username: 'admin_user', password: 'password123' }).expect(201)).body.access_token;
 
         writerToken = (await request(app.getHttpServer())
-            .post('/auth/login').send({ username: 'writer', password: 'writer' }).expect(201)).body.access_token;
+            .post('/auth/login').send({ username: 'writer_user', password: 'password123' }).expect(201)).body.access_token;
 
         readerToken = (await request(app.getHttpServer())
-            .post('/auth/login').send({ username: 'reader', password: 'reader' }).expect(201)).body.access_token;
+            .post('/auth/login').send({ username: 'reader_user', password: 'password123' }).expect(201)).body.access_token;
     });
 
     it('Should have seed data', async () => {
@@ -66,7 +66,7 @@ describe('Post Flow E2E (Full Circuit)', () => {
     });
 
     it('Admin can approve post', async () => {
-        const createRes = await request(app.getHttpServer())
+        await request(app.getHttpServer())
             .post('/posts')
             .set('Authorization', `Bearer ${writerToken}`)
             .send({
@@ -76,20 +76,33 @@ describe('Post Flow E2E (Full Circuit)', () => {
             })
             .expect(201);
 
-        const postId = 'post-3';
+        const writerNotificationsBefore = await request(app.getHttpServer())
+            .get('/notifications')
+            .set('Authorization', `Bearer ${writerToken}`)
+            .expect(200);
 
-        // 2. Admin approuve
+        const postId = 'post-draft-1';
+        
         await request(app.getHttpServer())
             .patch(`/posts/${postId}/status`)
             .set('Authorization', `Bearer ${adminToken}`)
-            .send('accepted')
+            .send({ status: 'accepted' })
             .expect(200);
 
-        // 3. Writer a une notification
         const notifs = await request(app.getHttpServer())
             .get('/notifications')
             .set('Authorization', `Bearer ${writerToken}`)
             .expect(200);
+
+        expect(notifs.body.notifications.length).toBeGreaterThan(
+            writerNotificationsBefore.body.notifications.length,
+        );
+
+        expect(
+            notifs.body.notifications.some((notification: { type: string; metadata?: { postId?: string } }) =>
+                notification.type === 'POST_APPROVED' && notification.metadata?.postId === postId,
+            ),
+        ).toBe(true);
     });
 
     it('Writer receives post approval notification', async () => {
