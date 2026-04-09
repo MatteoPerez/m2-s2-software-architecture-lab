@@ -5,22 +5,22 @@ import { SQLiteTagEntity } from 'src/modules/tags/infrastructure/entities/tag.sq
 @Entity('posts')
 export class SQLitePostEntity {
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column()
-  content: string;
+  content!: string;
 
   @Column({ type: 'varchar', length: 20 })
-  status: PostStatus;
+  status!: PostStatus;
 
   @Column()
-  authorId: string;
+  authorId!: string;
 
   @Column({ unique: true })
-  slug: string;
+  slug!: string;
 
   @ManyToMany(() => SQLiteTagEntity, (tag) => tag.posts)
   @JoinTable({
@@ -28,5 +28,5 @@ export class SQLitePostEntity {
     joinColumn: { name: 'post_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'tag_id', referencedColumnName: 'id' },
   })
-  tags: SQLiteTagEntity[];
+  tags!: SQLiteTagEntity[];
 }

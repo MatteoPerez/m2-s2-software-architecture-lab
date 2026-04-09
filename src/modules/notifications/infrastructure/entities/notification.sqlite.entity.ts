@@ -4,31 +4,31 @@ import { NotificationType } from '../../domain/entities/notification.entity';
 @Entity('notifications')
 export class SQLiteNotificationEntity {
     @PrimaryColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column()
-    recipientId: string;
+    recipientId!: string;
 
     @Column({
         type: 'varchar',
     })
-    type: NotificationType;
+    type!: NotificationType;
 
     @Column()
-    title: string;
+    title!: string;
 
     @Column()
-    message: string;
+    message!: string;
 
     @Column()
-    link: string;
+    link!: string;
 
     @Column({ default: false })
-    isRead: boolean;
+    isRead!: boolean;
 
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt!: Date;
 
     @Column('simple-json', { nullable: true })
-    metadata: Record<string, any>;
+    metadata!: Record<string, any>;
 }

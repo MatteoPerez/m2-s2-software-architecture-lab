@@ -21,10 +21,10 @@ export class SubscriptionController {
     @Post(':id/follow')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')
-    @ApiOperation({ summary: 'Suivre un utilisateur' })
-    @ApiResponse({ status: 201, description: 'Utilisateur suivi avec succès.' })
-    @ApiResponse({ status: 400, description: 'Tentative de se suivre soi-même.' })
-    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    @ApiOperation({ summary: 'Follow a user' })
+    @ApiResponse({ status: 201, description: 'User followed successfully.' })
+    @ApiResponse({ status: 400, description: 'Attempt to follow oneself.' })
+    @ApiResponse({ status: 404, description: 'Target user not found.' })
     public async follow(
         @Param('id') targetUserId: string,
         @Requester() user: UserEntity,
@@ -36,9 +36,9 @@ export class SubscriptionController {
     @Delete(':id/unfollow')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('access-token')
-    @ApiOperation({ summary: 'Ne plus suivre un utilisateur' })
-    @ApiResponse({ status: 200, description: 'Utilisateur non suivi avec succès.' })
-    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    @ApiOperation({ summary: 'Unfollow a user' })
+    @ApiResponse({ status: 200, description: 'User unfollowed successfully.' })
+    @ApiResponse({ status: 404, description: 'Target user not found.' })
     public async unfollow(
         @Param('id') targetUserId: string,
         @Requester() user: UserEntity,
@@ -48,9 +48,9 @@ export class SubscriptionController {
     }
 
     @Get(':id/followers')
-    @ApiOperation({ summary: 'Obtenir les abonnés d\'un utilisateur' })
-    @ApiResponse({ status: 200, description: 'Liste des abonnés récupérée avec succès.' })
-    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    @ApiOperation({ summary: 'Get the followers of a user' })
+    @ApiResponse({ status: 200, description: 'List of followers retrieved successfully.' })
+    @ApiResponse({ status: 404, description: 'Target user not found.' })
     public async getFollowers(
         @Param('id') userId: string,
         @Query('page') page: number = 1,
@@ -62,9 +62,9 @@ export class SubscriptionController {
     }
 
     @Get(':id/following')
-    @ApiOperation({ summary: 'Obtenir les abonnements d\'un utilisateur' })
-    @ApiResponse({ status: 200, description: 'Liste des abonnements récupérée avec succès.' })
-    @ApiResponse({ status: 404, description: 'Utilisateur cible non trouvé.' })
+    @ApiOperation({ summary: 'Get the users that a user is following' })
+    @ApiResponse({ status: 200, description: 'List of following retrieved successfully.' })
+    @ApiResponse({ status: 404, description: 'Target user not found.' })
     public async getFollowing(
         @Param('id') userId: string,
         @Query('page') page: number = 1,

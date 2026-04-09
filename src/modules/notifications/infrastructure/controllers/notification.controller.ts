@@ -19,13 +19,13 @@ export class NotificationController {
     ) { }
 
     @Get()
-    @ApiOperation({ summary: 'Obtenir mes notifications' })
+    @ApiOperation({ summary: 'Get my notifications with pagination and read/unread filter' })
     @ApiQuery({ name: 'page', required: false, example: 1 })
     @ApiQuery({ name: 'pageSize', required: false, example: 20 })
     @ApiQuery({ name: 'isRead', enum: ['true', 'false', 'all'], required: false, default: 'all' })
     @ApiResponse({
         status: 200,
-        description: 'Liste paginée des notifications',
+        description: 'List of paginated notifications',
         schema: {
             example: {
                 notifications: [{ id: "uuid", type: "NEW_COMMENT", title: "...", isRead: false }],
@@ -51,10 +51,10 @@ export class NotificationController {
     }
 
     @Patch(':id/read')
-    @ApiOperation({ summary: 'Marquer une notification comme lue' })
-    @ApiResponse({ status: 200, description: 'La notification a été marquée comme lue' })
-    @ApiResponse({ status: 403, description: 'Cette notification ne vous appartient pas' })
-    @ApiResponse({ status: 404, description: 'Notification introuvable' })
+    @ApiOperation({ summary: 'Mark a notification as read' })
+    @ApiResponse({ status: 200, description: 'The notification has been marked as read' })
+    @ApiResponse({ status: 403, description: 'This notification does not belong to you' })
+    @ApiResponse({ status: 404, description: 'Notification not found' })
     public async markAsRead(
         @Param('id') id: string,
         @Requester() user: UserEntity
@@ -63,10 +63,10 @@ export class NotificationController {
     }
 
     @Post('mark-all-read')
-    @ApiOperation({ summary: 'Marquer toutes les notifications comme lues' })
+    @ApiOperation({ summary: 'Mark all notifications as read' })
     @ApiResponse({
         status: 201,
-        description: 'Toutes les notifications ont été marquées comme lues',
+        description: 'All notifications have been marked as read',
         schema: { example: { markedCount: 12 } }
     })
     public async markAllRead(@Requester() user: UserEntity) {

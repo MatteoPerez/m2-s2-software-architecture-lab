@@ -2,8 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateCommentDto {
     @ApiProperty({ 
-        description: 'Le nouveau contenu du commentaire', 
-        example: 'Ceci est mon commentaire modifié.' 
+        description: 'New content of the comment', 
+        example: 'This is an updated comment content.'
     })
-    content: string;
+    content!: string;
 }

@@ -3,20 +3,20 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 @Entity('comments')
 export class SQLiteCommentEntity {
     @PrimaryColumn()
-    id: string;
+    id!: string;
 
     @Column()
-    content: string;
+    content!: string;
 
     @Column()
-    authorId: string;
+    authorId!: string;
 
     @Column()
-    postId: string;
+    postId!: string;
 
     @Column()
-    createdAt: Date;
+    createdAt!: Date;
 
     @Column()
-    updatedAt: Date;
+    updatedAt!: Date;
 }
