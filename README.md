@@ -1,47 +1,57 @@
-## Description
+# Software Architecture Lab API
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Project Description
 
-## Project setup
+NestJS REST API for managing posts, users, tags, comments, notifications, and subscriptions with role-based access control and JWT authentication.
+
+## Prerequisites
+
+- Node.js v22.11.0+
+- npm v10.9.0+
+
+## Installation
 
 ```bash
-$ npm install
+npm install
+npm run seed
+npm run start:dev
 ```
 
-## Compile and run the project
+API available at `http://localhost:3000`
 
-```bash
-# development
-$ npm run start
+## Environment Variables
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```env
+PORT=3000
+DATABASE_URL=db/app.sqlite
+JWT_SECRET=your-secret-key
+JWT_EXPIRATION=3600
+NODE_ENV=development
 ```
 
-## Run tests
+## API Documentation
+
+Swagger UI: `http://localhost:3000/api`
+
+## Testing
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run test        # Unit tests
+npm run test:e2e    # E2E tests
+npm run test:cov    # Coverage
 ```
 
 ## Seed Data
 
-The repository includes a deterministic seed runner for the SQLite database.
-
 ```bash
-$ npm run seed
+npm run seed
 ```
 
-By default, the seed script writes to `db/app.sqlite`. If `DATABASE_URL` is set, that path is used instead. The seeded data includes four users, four posts, five tags, sample comments, one subscription, and sample notifications.
+### Default Users
 
-The application stores roles and post statuses using the values expected by the codebase (`user`, `writer`, `moderator`, `admin` and `draft`, `waiting`, `accepted`, `rejected`), even when the assignment describes them in uppercase.
+| Username | Password | Role |
+|----------|----------|------|
+| `reader_user` | `password123` | user |
+| `writer_user` | `password123` | writer |
+| `moderator_user` | `password123` | moderator |
+| `admin_user` | `password123` | admin |
