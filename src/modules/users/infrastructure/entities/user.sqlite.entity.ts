@@ -4,14 +4,14 @@ import { type UserRole } from '../../domain/entities/user.entity';
 @Entity('users')
 export class SQLiteUserEntity {
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
   @Column()
-  username: string;
+  username!: string;
+
+  @Column({ type: 'varchar', length: 20 })
+  role!: UserRole;
 
   @Column()
-  role: UserRole;
-
-  @Column()
-  password: string;
+  password!: string;
 }

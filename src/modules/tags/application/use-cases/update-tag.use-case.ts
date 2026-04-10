@@ -6,6 +6,7 @@ import { UpdateTagDto } from '../dtos/update-tag.dto';
 import { TagAlreadyExistsException } from '../../domain/exceptions/tag-already-exists.exception';
 import { UserEntity } from 'src/modules/users/domain/entities/user.entity';
 import { UserCannotUpdateTagException } from '../../domain/exceptions/user-cannot-update-tag.exception';
+import { emitEvent } from 'src/modules/shared/events/emit-event';
 
 @Injectable()
 export class UpdateTagUseCase {
@@ -37,7 +38,7 @@ export class UpdateTagUseCase {
         
         await this.tagRepository.updateTag(id, tag);
 
-        this.eventEmitter.emit('tag.updated', { tagId: id, name: input.name });
+        await emitEvent(this.eventEmitter, 'tag.updated', { tagId: id, name: input.name });
         }
     }
 }

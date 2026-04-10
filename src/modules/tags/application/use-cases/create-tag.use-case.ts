@@ -8,6 +8,7 @@ import { UserCannotCreateTagException } from '../../domain/exceptions/user-canno
 import { TagAlreadyExistsException } from '../../domain/exceptions/tag-already-exists.exception';
 import { TagRepository } from '../../domain/repositories/tag.repository';
 import { CreateTagDto } from '../dtos/create-tag.dto';
+import { emitEvent } from 'src/modules/shared/events/emit-event';
 
 @Injectable()
 export class CreateTagUseCase {
@@ -28,7 +29,7 @@ export class CreateTagUseCase {
 
         await this.tagRepository.createTag(tag);
 
-        this.eventEmitter.emit(TagCreatedEvent, {
+        await emitEvent(this.eventEmitter, TagCreatedEvent, {
             tagId: tag.id,
             tagName: tag.name.toString(),
         });

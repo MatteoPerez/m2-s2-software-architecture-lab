@@ -3,6 +3,7 @@ import { LoggingService } from '../../../shared/logging/domain/services/logging.
 import { PostRepository } from '../../domain/repositories/post.repository';
 import { UserEntity } from 'src/modules/users/domain/entities/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { emitEvent } from 'src/modules/shared/events/emit-event';
 
 @Injectable()
 export class DeletePostUseCase {
@@ -22,7 +23,7 @@ export class DeletePostUseCase {
         throw new ForbiddenException("You cannot delete this post");
     }
 
-    this.eventEmitter.emit('post.deleted', {
+    await emitEvent(this.eventEmitter, 'post.deleted', {
         postId: post.id,
         authorId: post.authorId,
         title: post.title.toString()

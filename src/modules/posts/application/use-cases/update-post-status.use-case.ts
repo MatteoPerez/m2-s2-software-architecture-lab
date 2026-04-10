@@ -5,6 +5,7 @@ import { PostRepository } from '../../domain/repositories/post.repository';
 import { UserEntity } from 'src/modules/users/domain/entities/user.entity';
 import { PostStatus } from '../../domain/entities/post.entity';
 import { LoggingService } from 'src/modules/shared/logging/domain/services/logging.service';
+import { emitEvent } from 'src/modules/shared/events/emit-event';
 
 @Injectable()
 export class UpdatePostStatusUseCase {
@@ -35,7 +36,7 @@ export class UpdatePostStatusUseCase {
         await this.postRepository.updatePost(id, post);
         this.loggingService.log(post.id);
         this.loggingService.log(post.authorId);
-        this.eventEmitter.emit('post.status.changed', {
+        await emitEvent(this.eventEmitter, 'post.status.changed', {
             postId: post.id,
             authorId: post.authorId,
             title: post.title.toString(),

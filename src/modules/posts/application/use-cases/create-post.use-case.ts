@@ -7,6 +7,7 @@ import { UserCannotCreatePostException } from '../../domain/exceptions/user-cann
 import { PostRepository } from '../../domain/repositories/post.repository';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { PostSlug } from '../../domain/value-objects/post-slug.value-object';
+import { emitEvent } from 'src/modules/shared/events/emit-event';
 
 @Injectable()
 export class CreatePostUseCase {
@@ -41,7 +42,7 @@ export class CreatePostUseCase {
 
     await this.postRepository.createPost(post);
 
-    this.eventEmitter.emit('post.pending_review', {
+    await emitEvent(this.eventEmitter, 'post.pending_review', {
       postId: post.id,
       authorId: user.id,
       title: post.title.toString(),

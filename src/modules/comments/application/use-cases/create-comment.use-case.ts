@@ -4,6 +4,7 @@ import { CommentRepository } from '../../domain/repositories/comment.repository'
 import { CommentEntity } from '../../domain/entities/comment.entity';
 import { UserEntity } from '../../../users/domain/entities/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { emitEvent } from 'src/modules/shared/events/emit-event';
 
 @Injectable()
 export class CreateCommentUseCase {
@@ -33,7 +34,7 @@ export class CreateCommentUseCase {
 
         await this.commentRepository.save(comment);
 
-        this.eventEmitter.emit('comment.created', {
+        await emitEvent(this.eventEmitter, 'comment.created', {
             postId: post.id,
             authorId: post.authorId,
             commenterName: user.username,

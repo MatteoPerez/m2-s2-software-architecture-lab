@@ -36,7 +36,7 @@ describe('Post Flow E2E (Full Circuit)', () => {
     it('Writer can create post with tag', async () => {
         const loginRes = await request(app.getHttpServer())
             .post('/auth/login')
-            .send({ username: 'writer', password: 'writer' })
+            .send({ username: 'writer_user', password: 'password123' })
             .expect(201);
 
         const writerToken = loginRes.body.access_token;
