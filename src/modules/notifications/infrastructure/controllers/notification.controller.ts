@@ -28,7 +28,17 @@ export class NotificationController {
         description: 'List of paginated notifications',
         schema: {
             example: {
-                notifications: [{ id: "uuid", type: "NEW_COMMENT", title: "...", isRead: false }],
+                notifications: [{
+                    id: '6b6b31cd-1c3a-4eb0-9445-ac41ed7349cf',
+                    recipientId: 'b59f90d1-e243-4f67-b658-68ce03e92a87',
+                    type: 'NEW_COMMENT',
+                    title: 'New comment on your post',
+                    message: 'alex_writer commented on "Designing Event-Driven APIs".',
+                    link: '/posts/designing-event-driven-apis',
+                    isRead: false,
+                    createdAt: '2026-04-10T09:30:00.000Z',
+                    metadata: { postId: 'f8f64566-4ce9-4d9f-9675-20cf636db78f' }
+                }],
                 total: 45,
                 unreadCount: 12,
                 page: 1,
@@ -67,7 +77,7 @@ export class NotificationController {
     @ApiResponse({
         status: 201,
         description: 'All notifications have been marked as read',
-        schema: { example: { markedCount: 12 } }
+        schema: { example: { markedCount: 5 } }
     })
     public async markAllRead(@Requester() user: UserEntity) {
         return await this.markAllReadUseCase.execute(user.id);

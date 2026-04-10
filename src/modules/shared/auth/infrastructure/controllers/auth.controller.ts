@@ -21,7 +21,7 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YjZiMzFjZC0xYzNhLTRlYjAtOTQ0NS1hYzQxZWQ3MzQ5Y2YiLCJyb2xlIjoid3JpdGVyIiwiaWF0IjoxNzEyNzM2MDAwLCJleHAiOjE3MTI3Mzk2MDB9.signed_token_sample' },
       },
     },
   })

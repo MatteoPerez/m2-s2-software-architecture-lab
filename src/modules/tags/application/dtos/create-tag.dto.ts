@@ -6,5 +6,5 @@ export class CreateTagDto {
     description: 'Name of the tag',
   })
 
-  name: string;
+  name!: string;
 }
